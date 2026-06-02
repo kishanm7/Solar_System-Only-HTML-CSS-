@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Solar System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- CSS State Variables (Hidden Inputs) -->
+    <input type="checkbox" id="pause-cb" hidden />
+    <input type="radio" name="speed" id="speed-05" hidden />
+    <input type="radio" name="speed" id="speed-1" checked hidden />
+    <input type="radio" name="speed" id="speed-2" hidden />
+    <input type="radio" name="speed" id="speed-3" hidden />
+
+    <!-- Control Panel -->
+    <header class="panel">
+        <div class="titles">
+            <h1>SOLAR SYSTEM</h1>
+            <p>Pure CSS 3D Architecture</p>
+        </div>
+        
+        <div class="controls">
+            <label for="pause-cb" class="toggle-btn" id="pause-label">
+                <span id="pause-text"></span>
+            </label>
+        </div>
+        <div class="speed-controls">
+            <span class="speed-title">Speed:</span>
+            <label for="speed-05" class="radio-btn">0.5x</label>
+            <label for="speed-1" class="radio-btn">1.0x</label>
+            <label for="speed-2" class="radio-btn">2.0x</label>
+            <label for="speed-3" class="radio-btn">3.0x</label>
+        </div>
+    </header>
+
+    <main class="scene">
+        <div class="solar-system">
+            <div class="sun-wrapper" style="--p-size: 160px">
+                <div class="tilt-container">
+                    <div class="planet-name sun-name">Sun</div>
+                    <div class="sun-visual"></div>
+                </div>
+            </div>
+
+            <!-- Orbit 1: Mercury -->
+            <div class="orbit" style="--o-size: 250px; --duration: 8s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 24px">
+                        <div class="tilt-container">
+                            <div class="planet-name">Mercury</div>
+                            <div class="planet mercury"></div>
+                            <div class="info-popup">
+                                <h3>Mercury</h3>
+                                <p>The smallest and fastest planet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orbit 2: Venus --> 
+            <div class="orbit" style="--o-size: 380px; --duration: 15s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 38px">
+                        <div class="tilt-container">
+                            <div class="planet-name">Venus</div>
+                            <div class="planet venus"></div>
+                            <div class="info-popup">
+                                <h3>Venus</h3>
+                                <p>Hottest planet with a toxic atmosphere.</p>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+
+            <!-- Orbit 3: Earth & Moon -->
+            <div class="orbit" style="--o-size: 550px; --duration: 24s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 44px">
+                        <!-- Moon System -->
+                         <div class="moon-orbit" style="--o-size: 80px; --duration: 4s">
+                            <div class="orbit-spinner">
+                                <div class="planet-wrapper" style="--p-size: 14px">
+                                    <div class="tilt-container">
+                                        <div class="planet moon"></div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+
+                        <!-- Earth Planet -->
+                        <div class="tilt-container">
+                            <div class="planet-name">Earth</div>
+                            <div class="planet earth"></div>
+                            <div class="info-popup">
+                                <h3>Earth</h3>
+                                <p>Our home planet, rich in water and life.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- Orbit 4: Mars -->
+            <div class="orbit" style="--o-size: 700px; --duration: 36s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 32px">
+                        <div class="tilt-container">
+                            <div class="planet-name">Mars</div>
+                            <div class="planet mars"></div>
+                            <div class="info-popup">
+                                <h3>Mars</h3>
+                                <p>The Red Planet, home to Olympus Mons.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orbit 5: Jupiter -->
+            <div class="orbit" style="--o-size: 1000px; --duration: 60s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 90px">
+                        <div class="tilt-container">
+                            <div class="planet-name">Jupiter</div>
+                            <div class="planet jupiter"></div>
+                            <div class="info-popup">
+                                <h3>Jupiter</h3>
+                                <p>The largest gas giant with the Great Red Spot.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orbit 6: Saturn (With Rings) -->
+            <div class="orbit" style="--o-size: 1300px; --duration: 90s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 80px">
+                        <div class="saturn-rings"></div>
+                        <div class="tilt-container">
+                            <div class="planet-name">Saturn</div>
+                            <div class="planet saturn"></div>
+                            <div class="info-popup">
+                                <h3>Saturn</h3>
+                                <p>Adorned with a dazzling system of icy rings.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orbit 7: Uranus -->
+            <div class="orbit" style="--o-size: 1600px; --duration: 140s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 60px">
+                        <div class="tilt-container">
+                            <div class="planet-name">Uranus</div>
+                            <div class="planet uranus"></div>
+                            <div class="info-popup">
+                                <h3>Uranus</h3>
+                                <p>An ice giant that rotates on its side.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orbit 8: Neptune -->
+            <div class="orbit" style="--o-size: 1900px; --duration: 200s">
+                <div class="orbit-spinner">
+                    <div class="planet-wrapper" style="--p-size: 56px">
+                        <div class="tilt-container">
+                            <div class="planet-name">Neptune</div>
+                            <div class="planet neptune"></div>
+                            <div class="info-popup">
+                                <h3>Neptune</h3>
+                                <p>The windiest planet, dark and bitterly cold.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

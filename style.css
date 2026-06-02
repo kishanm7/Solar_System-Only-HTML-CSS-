@@ -1,0 +1,390 @@
+/* Global Variables */
+:root {
+    --tilt: 70deg;
+    --zoom: 0.7;
+    --speed-scale: 1;
+    --play-state: running;
+}
+
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Yeh puri website ke animations ko play/pause control dega */
+    animation-play-state: var(--play-state) !important;
+}
+
+/* 1. THE SPACE CANVAS */
+body {
+    background-color:#020514;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* =========================================
+   Space Background
+   ========================================= */
+
+body::before {
+    content:"";
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background:radial-gradient(circle at 15% 50%,rgba(40,20,80,0.4),transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(20,60,80,0.3), transparent 50%),
+                #020514
+}
+
+body::after {
+    content:"";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px,  #eee, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 80px 70px,  #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 150px 180px,  #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 250px 90px,  #ccc, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 350px 240px,  #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 450px 110px,  #ddd, rgba(0, 0, 0, 0));
+    background-size: 500px 500px;
+    
+    animation: twinkle 3.5s linear infinite alternate;
+} 
+
+@keyframes twinkle {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* =========================================
+   Pure CSS Global State Management
+   ========================================= */
+
+/* Handle Play/Pause */
+body:has(#pause-cb:checked) { --play-state: paused; }
+body:has(#pause-cb:checked) #pause-text::after { content: "Play"; color: #ff5722;}
+body:has(#pause-cb:not(checked)) #pause-text::after { content: "Pause"; color: #4b94f0;}
+
+/* Handle Speed Scaling */
+body:has(#speed-05:checked) { --speed-scale: 0.5; }
+body:has(#speed-1:checked) { --speed-scale: 1; }
+body:has(#speed-2:checked) { --speed-scale: 2; }
+body:has(#speed-3:checked) { --speed-scale: 3; }
+
+/* Highlight Active Speed Button */
+body:has(#speed-05:checked) label[for="speed-05"],
+body:has(#speed-1:checked) label[for="speed-1"],
+body:has(#speed-2:checked) label[for="speed-2"],
+body:has(#speed-3:checked) label[for="speed-3"] { 
+    background: #4b94f0;
+    color: white;
+    border-color: #4b94f0;
+    box-shadow: 0 0 10px rgba(75, 148, 240, 0.5);
+}
+
+/* =========================================
+   UI & Controls Styling
+   ========================================= */
+.panel {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
+    background: rgba(10, 15, 30, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 30px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.titles h1 {
+    font-size: 22px;
+    letter-spacing: 4px;
+    margin-bottom: 2px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.titles p {
+    font-size: 13px;
+    color: #8892b0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.speed-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.speed-title { font-size: 14px; color: #8892b0; margin-right: 5px; }
+
+.toggle-btn, .radio-btn {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.toggle-btn:hover, .radio-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+/* =========================================
+   Labels and Popups 
+   ========================================= */
+.planet-name {
+    position: absolute;
+    bottom: calc(var(--p-size) / 2 + 15px);
+    transform: translateX(-50%);
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+    transition: 0.3s;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.sun-name { color: #ffb300; bottom: calc(var(--p-size) / 2 + 25px); }
+
+.info-popup {
+    position: absolute;
+    top: calc(var(--p-size) / 2 + 25px);
+    transform: translateX(-50%);
+    background: rgba(10, 15, 30, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 14px 18px;
+    border-radius: 10px;
+    width: max-content;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+}
+
+.info-popup h3 { font-size: 16px; color: #4b94f0; margin-bottom: 5px; }
+.info-popup p { font-size: 13px; color: #b0bec5; max-width: 160px; line-height: 1.4; }
+
+/* Hover Interactions */
+.planet-wrapper:hover, .sun-wrapper:hover { cursor: pointer; }
+
+.planet-wrapper:hover .planet-name, .sun-wrapper:hover .planet-name {
+    color: #ffffff; text-shadow: 0 0 10px white;
+}
+
+.planet-wrapper:hover .info-popup {
+    opacity: 1; transform: translateX(-50%) translateY(-10px);
+}
+
+/* =========================================
+   Solar System 3D Architecture & Sun
+   ========================================= */
+.scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(var(--zoom));    
+}
+
+.solar-system {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--tilt));
+}
+
+.sun-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-style: preserve-3d;
+}
+.sun-visual {
+    position: absolute;
+    width: var(--p-size);
+    height: var(--p-size);
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at center,#fffde7, #ffb300, #ff5722);
+    box-shadow: 0 0 80px #ffb300, 0 0 150px #ff5722, 0 0 250px rgba(255, 87, 34, 0.6) ;
+    animation: sun-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes sun-pulse {
+    0%{
+        filter: brightness(1) scale(1);
+    }
+    100%{
+        filter: brightness(1.15) scale(1.03);
+    }
+}
+
+/* =========================================
+   The Mechanics (Orbits & Planets)
+   ========================================= */
+
+.orbit {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: var(--o-size);
+    width: var(--o-size);
+    transform: translate(-50%,-50%);
+    transform-style: preserve-3d;
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+}
+
+.orbit-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    /* Math Jadu: Original speed ko speed-scale se divide kiya */
+    animation: spin calc(var(--duration)/var(--speed-scale)) infinite linear;    
+}
+
+@keyframes spin {
+    to {
+        transform: rotateZ(360deg);
+    }
+}
+
+/* Planet Placement */
+
+.planet-wrapper {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform-style: preserve-3d;
+    /* Planet ko ulta ghumane ki speed bhi UI ke hisab se set hogi */
+    animation: counter-spin calc(var(--duration) / var(--speed-scale)) linear infinite;
+}
+
+.tilt-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(calc(var(--tilt) * -1));
+}
+
+.planet {
+    position: absolute;
+    width: var(--p-size);
+    height: var(--p-size);
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.8), 0 0 5px rgba(255, 255, 255, 0.1);
+
+}
+.mercury {
+    background: radial-gradient(circle at 30% 30%, #b5b5b5, #5a5a5a, #222);
+}
+
+.venus {
+    background: radial-gradient(circle at 30% 30%, #f0cd92, #a8742b, #4a300d);
+}
+
+.earth {
+    background: radial-gradient(circle at 30% 30%, #5ba4ff, #1b53a3, #081d40);
+}  
+
+.mars {
+    background: radial-gradient(circle at 30% 30%, #ff7a59, #a8361b, #451307);
+}
+
+/* Jupiter uses Linear Gradient for its Stripes! */
+.jupiter {
+    background: linear-gradient(to bottom, #e3c8b1 10%, #c4966b 30%, #f2dfcc 50%, #c4966b 70%, #e3c8b1 90%);
+}
+
+.saturn {
+    background: radial-gradient(circle at 30% 30%, #f5dfba, #b89868, #4f3f26);
+}
+
+.uranus {
+    background: radial-gradient(circle at 30% 30%, #9eedff, #3895ab, #133f4a);
+}
+
+.neptune {
+    background: radial-gradient(circle at 30% 30%, #527bff, #1738ab, #06154d);
+}
+
+/* =========================================
+   Complex Objects (Moon System)
+   ========================================= */
+
+.moon-orbit {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--o-size);
+    height: var(--o-size);
+    border: 1px dotted rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transform-style: preserve-3d;
+}
+
+.moon {
+    background: radial-gradient(circle at 30% 30%, #ffffff, #aaaaaa, #333333);
+    box-shadow: inset -4px -4px 6px rgba(0, 0, 0, 0.8), 0 0 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+.saturn-rings {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: calc(var(--p-size) * 2.5);
+    height: calc(var(--p-size) * 2.5);
+    transform: translate(-50%,-50%);
+    border: 10px solid rgba(210, 180, 140, 0.4);
+    border-radius: 50%;
+    border-top-width: 2px; /* Creates a 3D depth illusion */
+    border-bottom-color: rgba(210, 180, 140, 0.1);
+    box-shadow: 0 0 20px rgba(210, 180, 140, 0.3);
+}
+
+@keyframes counter-spin {
+    to {
+        transform: rotateZ(-360deg);
+    }
+}
